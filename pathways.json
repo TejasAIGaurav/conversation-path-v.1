@@ -1,0 +1,26 @@
+{
+        "1": {
+            "prompt": "Greet the user by name, introduce yourself and the company, and acknowledge their loan inquiry from a specific source. Then, ask if it's a good time to talk.",
+            "example": "Hello, {Lead_first_name}, this is Anjana calling from Ambak. We received your inquiry regarding a loan through {source}. I'm here to assist you with your request. Is it a good time to talk, or would you prefer I call back at a later time?",
+            "condition": "Must ensure that the user confirms that it is right time to talk or acknowledge in a positive way",
+            "action": "",
+            "type": "start"
+        },
+
+        "2": {
+            "prompt": "Thank the user and ask for providing additional details like email",
+            "example": "",
+            "condition": "Must ensure that the user confirms that it is right time to talk or acknowledge in a positive way",
+            "action": "end call",
+            "type": "leaf",
+            "answer": "yes"
+        },
+
+        "3": {
+                "prompt": "Thank the user and then end the call",
+                "action": "end call",
+                "type": "leaf",
+                "condition": "Ask user if they want to reschedule the call at some later time",
+                "answer": "no"
+        }
+}

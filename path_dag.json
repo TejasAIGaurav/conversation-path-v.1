@@ -1,0 +1,16 @@
+
+{
+    "edges": [
+         {
+            "current": "1",
+            "next": "2",
+            "condition": "positive"
+         },
+
+         {
+            "current": "1",
+            "next": "3",
+            "condition": "negative"
+         }
+    ]
+}
