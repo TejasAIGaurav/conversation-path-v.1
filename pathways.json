@@ -1,26 +1,107 @@
 {
         "1": {
             "prompt": "Greet the user by name, introduce yourself and the company, and acknowledge their loan inquiry from a specific source. Then, ask if it's a good time to talk.",
-            "example": "Hello, {Lead_first_name}, this is Anjana calling from Ambak. We received your inquiry regarding a loan through {source}. I'm here to assist you with your request. Is it a good time to talk, or would you prefer I call back at a later time?",
+            "example": "Hello Gaurav,  this is Anjana calling from Ambak. We received your inquiry regarding a loan through {source}. I'm here to assist you with your request. Is it a good time to talk, or would you prefer I call back at a later time?",
             "condition": "Must ensure that the user confirms that it is right time to talk or acknowledge in a positive way",
             "action": "",
-            "type": "start"
+            "type": "start",
+            "cases": ["positive", "negative"]
         },
 
-        "2": {
-            "prompt": "Thank the user and ask for providing additional details like email",
-            "example": "",
-            "condition": "Must ensure that the user confirms that it is right time to talk or acknowledge in a positive way",
-            "action": "end call",
-            "type": "leaf",
-            "answer": "yes"
-        },
+
 
         "3": {
-                "prompt": "Thank the user and then end the call",
-                "action": "end call",
-                "type": "leaf",
-                "condition": "Ask user if they want to reschedule the call at some later time",
-                "answer": "no"
-        }
+                "prompt": "Ask the user if they want to reschedule the call or not",
+                "condition": "User either agrees to reschedule the given call or gives a negative answer denoting that user is not interested in the services that we are offering",
+                "cases": ["positive" , "negative"]
+        },
+
+        "4": {
+            "prompt": "Ask the user when are they free and can we reschedule the call at that time",
+            "action": "end call",
+            "type": "leaf",
+            "condition": "Check if the time that user gave is valid or not. Time is valid if its later than the current time.",
+            "cases": ["positive"]
+        },
+
+        "5": {
+            
+                "prompt": "Seems like user does not want to reschedule the call. Thank the user for their time and end the call",
+                "condition": "No condition. User does not want our services. Thank them for their time and end the call",
+                "answer": "no",
+                "cases": [""]
+            
+        }, 
+
+
+        
+        "6": {
+            
+            "prompt": "Tell the user that time is rescheduled and Thank the user for their time and end the call",
+            "condition": "No condition. User has rescheduled the call. Thank them for their time and end the call",
+            "answer": "no",
+            "cases": [""]
+        
+    }, 
+
+
+
+    "7": {
+            
+        "prompt": "Thank the user for their time. Ask the user the next question about their employment status, whether the user is salaried or self-employed",
+        "condition": "Check whether user answer is salaried or self-employed",
+        "answer": "no",
+        "cases": ["salaried", "self-employed"]
+    
+    }, 
+
+
+    "8": {
+            
+        "prompt": "Thank the user for providing their employment status and ask the user the next question about monthly income in hand",
+        "condition": "Check whether the user gave a valid salary or not and check if its less than 50K, or equal or above 50K",
+        "answer": "no",
+        "cases": ["less", "greater"]
+    
+    }, 
+
+
+    "9": {
+            
+        "prompt": "Thank the user for providing their monthly salary and tell them they are eligible for a loan for upto 30 Lakh indian rupees and ask them if they want to take a loan or not",
+        "condition": "Check whether the user acknowledged that they want the loan or not.",
+        "answer": "no",
+        "cases": ["positive", "negative"]
+    
+    }, 
+
+
+    "10": {
+            
+        "prompt": "Thank the user for providing their monthly salary and tell them they are eligible for a loan for upto 60 Lakh indian rupees and ask them if they want to take a loan or not",
+        "condition": "Check whether the user acknowledged that they want the loan or not.",
+        "answer": "no",
+        "cases": ["positive", "negative"]
+    
+    }, 
+
+    "11": {
+            
+        "prompt": "Tell the user that their application is been processed and a brief of the call will be forwarded to them on their whatsapp number",
+        "condition": "No condition. Thank the user for their time and end the call.",
+        "answer": "no",
+        "cases": []
+    
+    }, 
+
+
+    
+    "12": {
+            
+        "prompt": "Thank the user for there time and tell them that if they want a loan in future then can avail Ambak services any time. ",
+        "condition": "No condition. Thank the user for their time and end the call.",
+        "answer": "no",
+        "cases": []
+    
+    }
 }

@@ -83,6 +83,20 @@ def generate_streaming_response(data):
         yield f"data: {json_data}\n\n"
 
 
+def generate_prompt_from_condition_and_cases(condition, cases):
+    prompt = "You're an AI classifier. Your goal is to classify the following condition/instructions based on the last user message. You can only answer in lower case and you only answers can be\n"
+    
+    # Add possible answers from the cases array
+    for case in cases:
+        prompt += f"yes,{case}\n"
+    
+    # Add instruction for unmatched conditions
+    prompt += "\nIf none of the condition is matched by the user answer, then the assistant should return answer as no.\n"
+    
+    # Include the condition in the prompt
+    prompt += f"The condition is as follows. Conditions/Instructions: {condition}"
+    
+    return prompt
 
 
 
@@ -115,11 +129,13 @@ def chat_completion_api():
     else:
         call_data_map[request_data.get('call').get('assistantId')] = 1
 
+    prompt= generate_prompt_from_condition_and_cases(prompt_messages[str(current_node_index)]['condition'] , prompt_messages[str(current_node_index)]['cases'])
 
-    prompt = f"""
-    You're an AI classifier. Your goal is to classify the following condition/instructions based on the last user message. If the condition is met, you only answer with a lowercase 'yes', and if it was not met, you answer with a lowercase 'no' (No Markdown or punctuation).
-    ----------
-    Conditions/Intructions: {prompt_messages[str(current_node_index)]['condition']}"""
+    # prompt = f"""
+    # You're an AI classifier. Your goal is to classify the following condition/instructions based on the last user message. If the condition is met, you only answer with a lowercase 'yes', and if it was not met, you answer with a lowercase 'no' (No Markdown or punctuation).
+    # ----------
+    # Conditions/Intructions: {get_the_condition_for_prompt(prompt_messages[str(current_node_index)]['condition'])}
+    # """
 
     prompt_completion_messages = [{
         "role": "system",
@@ -138,12 +154,18 @@ def chat_completion_api():
         messages=prompt_completion_messages,
         temperature=0.3)
 
-
-    if (completion.choices[0].message.content == 'yes'):
+    content_answers = completion.choices[0].message.content.split(",")
+    print("THE CONTENT ANSWES IS")
+    print(content_answers)
+    if (content_answers[0] == 'yes'):
         # count state
-        prompt_index = get_next_node(graph, str(current_node_index) , "positive" )
+        prompt_index = get_next_node(graph, str(current_node_index) , content_answers[1] )
 
         call_data_map[request_data.get('call').get('assistantId')] = prompt_index
+
+        print("ADDING NEW PROMPT INDEX AS")
+        print(prompt_index)
+        print(call_data_map[request_data.get('call').get('assistantId')])
 
         next_prompt = prompt_messages[prompt_index]['prompt']
         # modified_messages = [{
@@ -165,11 +187,14 @@ def chat_completion_api():
         # return Response(chat_completion.model_dump_json(),
         #                 content_type='application/json')
     else:
-        prompt_index = get_next_node(graph, str(current_node_index) , "negative" )
+        # prompt_index = current_node_index
 
-        call_data_map[request_data.get('call').get('assistantId')] = prompt_index
+        # call_data_map[request_data.get('call').get('assistantId')] = prompt_index
 
-        next_prompt = prompt_messages[prompt_index]['prompt']
+
+        next_prompt = f"""It seems like the user answer does is not related to the question. Mention that the previous answer does not seems to be related to question and ask the question again as mentioned below.
+        
+                        The question was:\n""" + prompt
 
 
     modified_messages = [{
@@ -195,28 +220,28 @@ def chat_completion_api():
                         content_type='application/json')
 
 
-@custom_llm.route('/generate_report', methods=['POST'])
-def generate_final_report():
-    request_data = request.get_json()
-    # logger.info(f"Request data: {json.dumps(request_data, indent=2)}")
-    next_prompt = ''
+# @custom_llm.route('/generate_report', methods=['POST'])
+# def generate_final_report():
+#     request_data = request.get_json()
+#     # logger.info(f"Request data: {json.dumps(request_data, indent=2)}")
+#     next_prompt = ''
 
-    current_node_index = request_data['index']
-    user_answer = request_data['answer']
+#     current_node_index = request_data['index']
+#     user_answer = request_data['answer']
 
 
-    prompt = f"""
-    You're an AI classifier. Your goal is to classify the following condition/instructions based on the last user message. If the condition is met, you only answer with a lowercase 'yes', and if it was not met, you answer with a lowercase 'no' (No Markdown or punctuation).
-    ----------
-    Conditions/Intructions: {prompt_messages[current_node_index]['condition']}"""
+#     prompt = f"""
+#     You're an AI classifier. Your goal is to classify the following condition/instructions based on the last user message. If the condition is met, you only answer with a lowercase 'yes', and if it was not met, you answer with a lowercase 'no' (No Markdown or punctuation).
+#     ----------
+#     Conditions/Intructions: {prompt_messages[current_node_index]['condition']}"""
 
-    prompt_completion_messages = [{
-        "role": "system",
-        "content": prompt
-    }, {
-        "role": "user",
-        "content": user_answer
-    }]
+#     prompt_completion_messages = [{
+#         "role": "system",
+#         "content": prompt
+#     }, {
+#         "role": "user",
+#         "content": user_answer
+#     }]
 
 
 

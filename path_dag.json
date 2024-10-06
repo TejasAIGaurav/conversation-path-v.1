@@ -3,7 +3,7 @@
     "edges": [
          {
             "current": "1",
-            "next": "2",
+            "next": "7",
             "condition": "positive"
          },
 
@@ -11,6 +11,81 @@
             "current": "1",
             "next": "3",
             "condition": "negative"
+         },
+
+         {
+            "current": "3",
+            "next": "4",
+            "condition": "positive"
+         },
+
+         {
+            "current": "3",
+            "next": "5",
+            "condition": "negative"
+         },
+
+         {
+            "current": "4",
+            "next": "6",
+            "condition": "positive"
+         },
+
+
+
+
+         {
+            "current": "7",
+            "next": "8",
+            "condition": "salaried"
+         },
+
+
+         {
+            "current": "7",
+            "next": "8",
+            "condition": "self-employed"
+         },
+
+         {
+            "current": "8",
+            "next": "9",
+            "condition": "less"
+         },
+
+
+         {
+            "current": "8",
+            "next": "10",
+            "condition": "greater"
+         },
+
+
+         {
+            "current": "9",
+            "next": "11",
+            "condition": "positive"
+         },
+
+         {
+            "current": "10",
+            "next": "11",
+            "condition": "positive"
+         },
+
+
+         {
+            "current": "9",
+            "next": "12",
+            "condition": "negative"
+         },
+
+         {
+            "current": "10",
+            "next": "12",
+            "condition": "negative"
          }
+
+
     ]
 }
