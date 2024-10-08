@@ -191,10 +191,8 @@ def chat_completion_api():
 
         # call_data_map[request_data.get('call').get('assistantId')] = prompt_index
 
-
-        next_prompt = f"""It seems like the user answer does is not related to the question. Mention that the previous answer does not seems to be related to question and ask the question again as mentioned below.
-        
-                        The question was:\n""" + prompt
+        new_error_case = prompt_messages[current_node_index]['error_case']
+        next_prompt = f"""It seems like the user answer does is not related to the question. Mention that the previous answer does not seems to be related to question and ask the question again.\n""" + new_error_case
 
 
     modified_messages = [{

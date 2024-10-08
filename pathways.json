@@ -1,10 +1,8 @@
 {
         "1": {
             "prompt": "Greet the user by name, introduce yourself and the company, and acknowledge their loan inquiry from a specific source. Then, ask if it's a good time to talk.",
-            "example": "Hello Gaurav,  this is Anjana calling from Ambak. We received your inquiry regarding a loan through {source}. I'm here to assist you with your request. Is it a good time to talk, or would you prefer I call back at a later time?",
             "condition": "Must ensure that the user confirms that it is right time to talk or acknowledge in a positive way",
-            "action": "",
-            "type": "start",
+            "error_case": "Tell the user again that you called to tell about a loan and ask the user if its a good a time talk",
             "cases": ["positive", "negative"]
         },
 
@@ -13,6 +11,8 @@
         "3": {
                 "prompt": "Ask the user if they want to reschedule the call or not",
                 "condition": "User either agrees to reschedule the given call or gives a negative answer denoting that user is not interested in the services that we are offering",
+    
+            "error_case": "Ask the user again if they want to reschedule the call",
                 "cases": ["positive" , "negative"]
         },
 
@@ -21,6 +21,7 @@
             "action": "end call",
             "type": "leaf",
             "condition": "Check if the time that user gave is valid or not. Time is valid if its later than the current time.",
+            "error_case": "Ask the user again about the time when they want to reschedule the call",
             "cases": ["positive"]
         },
 
@@ -51,6 +52,7 @@
         "prompt": "Thank the user for their time. Ask the user the next question about their employment status, whether the user is salaried or self-employed",
         "condition": "Check whether user answer is salaried or self-employed",
         "answer": "no",
+        "error_case": "Ask the user again about their employment status, whether the user is salaried or self-employed",
         "cases": ["salaried", "self-employed"]
     
     }, 
@@ -61,6 +63,7 @@
         "prompt": "Thank the user for providing their employment status and ask the user the next question about monthly income in hand",
         "condition": "Check whether the user gave a valid salary or not and check if its less than 50K, or equal or above 50K",
         "answer": "no",
+        "error_case": "Ask the user again about their monthly income in hand",
         "cases": ["less", "greater"]
     
     }, 
@@ -71,6 +74,7 @@
         "prompt": "Thank the user for providing their monthly salary and tell them they are eligible for a loan for upto 30 Lakh indian rupees and ask them if they want to take a loan or not",
         "condition": "Check whether the user acknowledged that they want the loan or not.",
         "answer": "no",
+        "error_case": "Tell the user again that user is eligible for a loan upto 30 Lakh indian rupees and ask the user if they want a loan or not ",
         "cases": ["positive", "negative"]
     
     }, 
@@ -81,6 +85,7 @@
         "prompt": "Thank the user for providing their monthly salary and tell them they are eligible for a loan for upto 60 Lakh indian rupees and ask them if they want to take a loan or not",
         "condition": "Check whether the user acknowledged that they want the loan or not.",
         "answer": "no",
+        "error_case": "Tell the user again that user is eligible for a loan upto 60 Lakh indian rupees and ask the user if they want a loan or not ",
         "cases": ["positive", "negative"]
     
     }, 
