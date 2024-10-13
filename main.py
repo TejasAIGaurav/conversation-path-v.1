@@ -166,30 +166,34 @@ def chat_completion_api():
     print("THE CONTENT ANSWER IS")
     print(content_answers)
     if (content_answers != 'no'):
-        condition_prompt = generate_condition_prompt(prompt_messages[str(current_node_index)]['cases'])
-        prompt_condition_matching = [{
-            "role": "system",
-            "content": condition_prompt
-        }, {
-            "role": "user",
-            "content": user_answer
-        }]
+        cases = prompt_messages[str(current_node_index)]['cases']
+        if len(cases) == 0 :
+            prompt_index = get_next_node(graph, str(current_node_index) , "none")
+        else:    
+            condition_prompt = generate_condition_prompt(prompt_messages[str(current_node_index)]['cases'])
+            prompt_condition_matching = [{
+                "role": "system",
+                "content": condition_prompt
+            }, {
+                "role": "user",
+                "content": user_answer
+            }]
 
-        # request_data['messages'] = prompt_condition_matching
-        # del request_data['call']
-        # del request_data['model']
-        # del request_data['metadata']
+            # request_data['messages'] = prompt_condition_matching
+            # del request_data['call']
+            # del request_data['model']
+            # del request_data['metadata']
 
-        condition_completion = client.chat.completions.create(model="llama3-8b-8192",
-                                                     messages=prompt_condition_matching,temperature=0.3)
+            condition_completion = client.chat.completions.create(model="llama3-8b-8192",
+                                                        messages=prompt_condition_matching,temperature=0.3)
 
 
-        print("CONDITION COMPLETION ANSWER IS")
-        print(condition_completion.choices[0].message.content)
+            print("CONDITION COMPLETION ANSWER IS")
+            print(condition_completion.choices[0].message.content)
 
-        # count state
-        prompt_index = get_next_node(graph, str(current_node_index),
-                                     condition_completion.choices[0].message.content)
+            # count state
+            prompt_index = get_next_node(graph, str(current_node_index),
+                                        condition_completion.choices[0].message.content)
 
         call_data_map[request_data.get('call').get(
             'assistantId')] = prompt_index
